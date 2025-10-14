@@ -5,6 +5,7 @@ $cbhtml = "";
 $cbcss = "";
 $cbjs = "";
 $lsAnime = "";
+$txtDuda = "";
 
 
 if ($_POST) {
@@ -16,6 +17,8 @@ if ($_POST) {
   $cbjs = (isset($_POST["cbjs"]) == "si") ? "checked" : "";;
 
   $lsAnime = (isset($_POST["lsAnime"])) ? $_POST["lsAnime"] : "";
+
+  $txtDuda = (isset($_POST["txtDuda"])) ? $_POST["txtDuda"] : "";
 } ?>
 
 <!DOCTYPE html>
@@ -30,6 +33,8 @@ if ($_POST) {
 <body>
   <?php if ($_POST) { ?>
     <strong>Hola: </strong> <?php echo $txtNombre . " te gusta " . $rdgLenguje . " y tu anime fav es " . $lsAnime; ?>
+    <br>
+    <strong>Tu duda es: </strong><?php echo $txtDuda . " cierto?" ?>
   <?php } ?>
   <form action="ejercicio31.php" method="post">
 
@@ -79,6 +84,11 @@ if ($_POST) {
         <option value="Dragon" <?php echo ($lsAnime == "Dragon") ? "selected" : "" ?>>Dragon Ball</option>
         <option value="Demon" <?php echo ($lsAnime == "Demon") ? "selected" : "" ?>>Demon Slayer</option>
       </select>
+    </div>
+
+    <div>
+      <h3>Tienes alguna duda?</h3>
+      <textarea name="txtDuda" id="txtDuda"></textarea>
     </div>
 
     <input type="submit" value="Enviar Información">

@@ -47,7 +47,7 @@ if ($_POST) {
     </section>
 
     <br>
-    <!-- Sección de gusto -->
+    <!-- Sección de gusta -->
     <section>
       <h3>Te gusta...</h3>
       <div>
@@ -81,6 +81,7 @@ if ($_POST) {
       </div>
     </section>
 
+    
     <div>
       <br>
       <input type="submit" value="Enviar Información">
