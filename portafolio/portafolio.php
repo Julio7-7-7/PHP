@@ -1,7 +1,23 @@
+<?php include("cabecera.php"); ?>
+<?php include("conexion.php"); ?>
 <?php
 
-include("cabecera.php");
+if ($_POST) {
+  $nombre = $_POST["nProject"];
+  // $imagen = $_POST["pImg"];
+  $objConexion = new conexion();
+  $sql = "INSERT INTO proyectos (id, nombre, imagen, descripcion)
+  VALUES (NULL, '$nombre' , 'imagen3.jpg', 'Tercer proyecto')";
+  $objConexion->ejecutar($sql);
+}
+
+$objConexion = new conexion();
+$proyectos = $objConexion->consultar("SELECT * FROM proyectos");
+
 ?>
+
+
+
 
 <div class="container">
   <div class="row">
@@ -9,8 +25,8 @@ include("cabecera.php");
       <div class="card">
         <div class="card-header">Datos Del proyecto</div>
         <div class="card-body">
-          <form action="portafolio.php" method="post">
 
+          <form action="portafolio.php" method="post" enctype="multipart/form-data">
             <br>
 
             <div>
@@ -32,6 +48,7 @@ include("cabecera.php");
             </div>
 
           </form>
+
         </div>
       </div>
     </div>
@@ -46,15 +63,22 @@ include("cabecera.php");
               <th scope="col">ID</th>
               <th scope="col">Nombre</th>
               <th scope="col">Imagen</th>
+              <th scope="col">Descripción</th>
+              <th scope="col">Eliminar</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr class="">
-              <td scope="row">3</td>
-              <td>Aplicación Web</td>
-              <td>Imagen.jpg</td>
-            </tr>
+            <?php foreach ($proyectos as $proyecto) { ?>
+              <tr class="">
+                <td scope="row"><?php echo $proyecto['id'] ?></td>
+                <td scope="row"><?php echo $proyecto['nombre'] ?></td>
+                <td scope="row"><?php echo $proyecto['imagen'] ?></td>
+                <td scope="row"><?php echo $proyecto['descripcion'] ?></td>
+                <td scope="row"><a class="btn btn-danger" href="#">Eliminar</a>
+                </td>
+              </tr>
+            <?php } ?>
           </tbody>
 
         </table>
