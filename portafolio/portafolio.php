@@ -2,22 +2,62 @@
 <?php include("conexion.php"); ?>
 <?php
 
+// INSERCIÓN
 if ($_POST) {
   $nombre = $_POST["nProject"];
-  // $imagen = $_POST["pImg"];
+  $descripcion = $_POST["pDesc"];
+
+  // Datos del archivo
+  $imagen = $_FILES["pImg"]["name"];
+  $imagenTmp = $_FILES["pImg"]["tmp_name"];
+
+  // Generar nombre único con timestamp
+  $fecha = new DateTime();
+  $nombreImagenFinal = $fecha->getTimestamp() . "_" . $imagen;
+
+  // Carpeta destino (asegúrate de que exista)
+  $rutaDestino = "Imagenes/" . $nombreImagenFinal;
+
+  // Mover archivo desde carpeta temporal a tu carpeta Imagenes
+  move_uploaded_file($imagenTmp, $rutaDestino);
+
   $objConexion = new conexion();
   $sql = "INSERT INTO proyectos (id, nombre, imagen, descripcion)
-  VALUES (NULL, '$nombre' , 'imagen3.jpg', 'Tercer proyecto')";
+          VALUES (NULL, '$nombre', '$nombreImagenFinal', '$descripcion')";
   $objConexion->ejecutar($sql);
+
+  header("location:portafolio.php");
+  exit();
 }
 
+
+//ELIMINACIÓN
+if (isset($_GET["borrar"])) {
+  $objConexion = new conexion();
+  $id = $_GET["borrar"];
+
+  // Obtener el nombre real del archivo
+  $imagen = $objConexion->consultar("SELECT imagen FROM proyectos WHERE id=" . $id);
+
+  // Si existe el archivo, eliminarlo
+  if (!empty($imagen[0]['imagen']) && file_exists("Imagenes/" . $imagen[0]['imagen'])) {
+    unlink("Imagenes/" . $imagen[0]['imagen']);
+  }
+
+  // Eliminar el registro de la base de datos
+  $sqlDelete = "DELETE FROM proyectos WHERE id = " . $id;
+  $objConexion->ejecutar($sqlDelete);
+
+  header("location:portafolio.php");
+  exit();
+}
+
+
+//LECTURA
 $objConexion = new conexion();
 $proyectos = $objConexion->consultar("SELECT * FROM proyectos");
 
 ?>
-
-
-
 
 <div class="container">
   <div class="row">
@@ -42,6 +82,12 @@ $proyectos = $objConexion->consultar("SELECT * FROM proyectos");
             </div>
 
             <br>
+
+            <div>
+              <label for="pDesc">Descripción</label>
+              <br>
+              <textarea name="pDesc" id="pDesc" placeholder="Comentarios del proyecto..."></textarea>
+            </div>
 
             <div>
               <input type="submit" value="Enviar" class="btn btn-success">
@@ -71,11 +117,11 @@ $proyectos = $objConexion->consultar("SELECT * FROM proyectos");
           <tbody>
             <?php foreach ($proyectos as $proyecto) { ?>
               <tr class="">
-                <td scope="row"><?php echo $proyecto['id'] ?></td>
-                <td scope="row"><?php echo $proyecto['nombre'] ?></td>
-                <td scope="row"><?php echo $proyecto['imagen'] ?></td>
-                <td scope="row"><?php echo $proyecto['descripcion'] ?></td>
-                <td scope="row"><a class="btn btn-danger" href="#">Eliminar</a>
+                <td scope="row"><?php echo $proyecto['id']; ?></td>
+                <td scope="row"><?php echo $proyecto['nombre']; ?></td>
+                <td scope="row"><img src="Imagenes/<?php echo $proyecto['imagen']; ?>" width="120"></td>
+                <td scope="row"><?php echo $proyecto['descripcion']; ?></td>
+                <td scope="row"><a class="btn btn-danger" href="?borrar=<?php echo $proyecto['id']; ?>">Eliminar</a>
                 </td>
               </tr>
             <?php } ?>

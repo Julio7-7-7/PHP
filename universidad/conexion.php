@@ -25,7 +25,7 @@ class conexion
     return $consulta->fetchAll();
   }
 
-  public function insertar($sql)
+  public function ejecutar($sql)
   {
     $consulta = $this->conexion->prepare($sql);
     $consulta->execute();
