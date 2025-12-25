@@ -3,7 +3,7 @@ if ($_POST) {
   $numeroA = $_POST["numeroA"];
   $numeroB = $_POST["numeroB"];
 
-  if (($numeroA > $numeroB) && ($numeroA = ! $numeroB)) {
+  if ($numeroA > $numeroB) {
     echo "Ya que el primero es mayor al segundo la suma es: " . $numeroA + $numeroB;
   } else {
     echo "Ya que el primero es menor al segundo la resta es: " . $numeroA - $numeroB;
