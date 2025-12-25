@@ -50,6 +50,13 @@ if ($_GET) {
   if (isset($_GET["borrar"])) {
     $objetoConexion = new conexion();
     $registro = $_GET["borrar"];
+
+    $sImg = $objetoConexion->leer("SELECT foto FROM universitario WHERE registro = " . $registro);
+
+    if (!empty($sImg[0]['foto']) && file_exists("fotos/" . $sImg[0]['foto'])) {
+      unlink("fotos/" . $sImg[0]['foto']);
+    }
+
     $sqlDelete = "DELETE FROM `universitario` WHERE registro = $registro";
     $objetoConexion->ejecutar($sqlDelete);
     header("location:estudiante.php");
