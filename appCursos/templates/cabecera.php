@@ -2,7 +2,8 @@
 <html lang="en">
 
 <head>
-  <title>Title</title>
+  <title>CrusosWeb</title>
+
   <!-- Required meta tags -->
   <meta charset="utf-8" />
   <meta
@@ -29,3 +30,4 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
+        <div class="row">
