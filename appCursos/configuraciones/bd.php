@@ -8,8 +8,8 @@ class BD
   {
     if (!isset(self::$instancia)) {
       $opciones[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
-      self::$instancia = new PDO('mysql:host=localhost;dbname=aplicacion', 'root', '', $opciones);
-      echo "Conexión realizada correctamente";
+      self::$instancia = new PDO('mysql:host=localhost;dbname=aplicacion', 'admin', 'admin123', $opciones);
+      //echo "Conexión realizada correctamente";
     }
 
     return self::$instancia;
