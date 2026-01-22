@@ -12,12 +12,12 @@
       <div class="card-body">
         <div class="mb-3">
           <label class="form-label">ID</label>
-          <input type="text" class="form-control" name="id" id="id" placeholder="ID">
+          <input type="text" class="form-control" name="id" id="id" placeholder="ID" value="<?php echo $id ?>">
         </div>
 
         <div class="mb-3">
           <label class="form-label">Nombre del curso</label>
-          <input type="text" class="form-control" name="nombre_curso" id="nombre_curso" placeholder="Nombre del curso">
+          <input type="text" class="form-control" name="nombre_curso" id="nombre_curso" placeholder="Nombre del curso" value="<?php echo $nombre_curso ?>">
         </div>
 
         <div class="btn-group" role="group">
@@ -45,7 +45,12 @@
           <tr>
             <td> <?php echo $curso['id'] ?></td>
             <td><?php echo $curso['nombre_curso'] ?></td>
-            <td>Seleccionar</td>
+            <td>
+              <form action="" method="post">
+                <input type="hidden" name="id" id="id" value="<?php echo $curso['id'] ?>">
+                <input type="submit" value="Seleccionar" name="accion" class="btn btn-info">
+              </form>
+            </td>
           </tr>
         <?php } ?>
       </tbody>
