@@ -15,15 +15,15 @@
           <form action="" method="POST">
             <div class="mb-2">
               <label class="form-label">ID</label>
-              <input type="text" name="id" class="form-control form-control-sm" placeholder="ID">
+              <input type="text" name="id" class="form-control form-control-sm" placeholder="ID" value="<?php echo $id ?>">
             </div>
             <div class="mb-2">
               <label class="form-label">Nombre</label>
-              <input type="text" name="nombre" class="form-control form-control-sm" placeholder="Nombre">
+              <input type="text" name="nombre" class="form-control form-control-sm" placeholder="Nombre" value="<?php echo $nombre ?>">
             </div>
             <div class="mb-3">
-              <label class="form-label">Apellido</label>
-              <input type="text" name="apellido" class="form-control form-control-sm" placeholder="Apellido">
+              <label class="form-label">Apellidos</label>
+              <input type="text" name="apellidos" class="form-control form-control-sm" placeholder="Apellidos" value="<?php echo $apellidos ?>">
             </div>
 
             <div class="d-grid gap-2">
@@ -56,7 +56,10 @@
                 <td><?php echo $alumnos['nombre'] ?></td>
                 <td><?php echo $alumnos['apellidos'] ?></td>
                 <td class="text-center">
-                  <button class="btn btn-info btn-sm">Seleccionar</button>
+                  <form action="" method="post">
+                    <input type="hidden" name="id" id="id" value="<?php echo $alumnos['id'] ?>">
+                    <input type="submit" value="Seleccionar" name="accion" class="btn btn-info btn-sm">
+                  </form>
                 </td>
               </tr>
             <?php } ?>
