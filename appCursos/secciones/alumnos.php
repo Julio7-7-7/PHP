@@ -4,10 +4,26 @@
 include_once '../configuraciones/bd.php';
 $conexionBD = BD::crearInstancia();
 
-//Llamado a todos los registros de la base de datos
+//Llamado a todas las personas de la base de datos
 $consulta = $conexionBD->prepare("SELECT * FROM alumnos");
 $consulta->execute();
 $listaAlumnos = $consulta->fetchAll();
+
+//Llamado a todos los cursos de la base de datos
+$consulta = $conexionBD->prepare("SELECT * FROM cursos");
+$consulta->execute();
+$listaCursos = $consulta->fetchAll();
+
+//llamado a todos los cursos asignados a los alumnos
+foreach ($listaAlumnos as $alumno) {
+  $sql = "SELECT * FROM cursos WHERE id IN (SELECT curso_id FROM alumnos_curso WHERE alumno_id = :alumno_id)";
+  $consulta = $conexionBD->prepare($sql);
+  $consulta->bindParam(':alumno_id', $alumno['id']);
+  $consulta->execute();
+  $cursosAsignados = $consulta->fetchAll();
+  $alumno['cursos'] = $cursosAlumno;
+}
+
 
 
 //Recepción de datos del formulario
@@ -15,6 +31,7 @@ $listaAlumnos = $consulta->fetchAll();
 $id = (isset($_POST['id'])) ? $_POST['id'] : "";
 $nombre = (isset($_POST['nombre'])) ? $_POST['nombre'] : "";
 $apellidos = (isset($_POST['apellidos'])) ? $_POST['apellidos'] : "";
+$cursos = (isset($_POST['cursos'])) ? $_POST['cursos'] : "";
 $accion = (isset($_POST['accion'])) ? $_POST['accion'] : "";
 
 //Recepción de la acción seleccionada
@@ -31,6 +48,7 @@ if ($accion) {
       $consulta->execute();
       header("Location: vista_alumnos.php");
       echo "Alumno agregado con éxito";
+      $idAlumno = $conexionBD->lastInsertId();
       break;
   }
 

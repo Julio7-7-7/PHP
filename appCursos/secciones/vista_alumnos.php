@@ -26,6 +26,16 @@
               <input type="text" name="apellidos" class="form-control form-control-sm" placeholder="Apellidos" value="<?php echo $apellidos ?>">
             </div>
 
+            <div class="mb-3">
+              <label for="" class="form-label">Cursos del Alumno</label>
+              <select multiple class="form-control" name="cursos[]" id="listaCursos">
+                <option>Seleccione una opción</option>
+                <option value="">Curso 1</option>
+                <option value="">Curso 2</option>
+              </select>
+
+            </div>
+
             <div class="d-grid gap-2">
               <button type="submit" name="accion" value="guardar" class="btn btn-success btn-sm">Guardar</button>
               <div class="btn-group">
