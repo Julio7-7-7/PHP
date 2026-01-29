@@ -4,17 +4,41 @@
 include_once '../configuraciones/bd.php';
 $conexionBD = BD::crearInstancia();
 
-//Llamado a todos los registros de la base de datos
+//Llamado a todas las personas de la base de datos
 $consulta = $conexionBD->prepare("SELECT * FROM alumnos");
 $consulta->execute();
 $listaAlumnos = $consulta->fetchAll();
 
+//Llamado a todos los cursos de la base de datos
+$consulta = $conexionBD->prepare("SELECT * FROM cursos");
+$consulta->execute();
+$listaCursos = $consulta->fetchAll();
+
+
+//llamado a todos los cursos asignados a los alumnos
+// Fíjate en el & antes de $alumno (Paso por referencia)
+foreach ($listaAlumnos as &$alumno) {
+  // La subconsulta es correcta, pero un JOIN suele ser más eficiente
+  $sql = "SELECT cursos.* FROM cursos 
+            INNER JOIN alumnos_cursos ON cursos.id = alumnos_cursos.idcurso 
+            WHERE alumnos_cursos.idalumno = :alumno_id";
+
+  $consulta = $conexionBD->prepare($sql);
+  $consulta->bindParam(':alumno_id', $alumno['id']);
+  $consulta->execute();
+
+  // Guardamos directamente el resultado en el array original
+  $alumno['cursos'] = $consulta->fetchAll(PDO::FETCH_ASSOC);
+}
+// Buena práctica: romper la referencia después del ciclo
+unset($alumno);
 
 //Recepción de datos del formulario
 
 $id = (isset($_POST['id'])) ? $_POST['id'] : "";
 $nombre = (isset($_POST['nombre'])) ? $_POST['nombre'] : "";
 $apellidos = (isset($_POST['apellidos'])) ? $_POST['apellidos'] : "";
+$cursos = (isset($_POST['cursos'])) ? $_POST['cursos'] : "";
 $accion = (isset($_POST['accion'])) ? $_POST['accion'] : "";
 
 //Recepción de la acción seleccionada
@@ -31,6 +55,7 @@ if ($accion) {
       $consulta->execute();
       header("Location: vista_alumnos.php");
       echo "Alumno agregado con éxito";
+      $idAlumno = $conexionBD->lastInsertId();
       break;
   }
 
