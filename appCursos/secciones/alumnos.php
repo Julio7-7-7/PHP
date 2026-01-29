@@ -14,17 +14,24 @@ $consulta = $conexionBD->prepare("SELECT * FROM cursos");
 $consulta->execute();
 $listaCursos = $consulta->fetchAll();
 
+
 //llamado a todos los cursos asignados a los alumnos
-foreach ($listaAlumnos as $alumno) {
-  $sql = "SELECT * FROM cursos WHERE id IN (SELECT curso_id FROM alumnos_curso WHERE alumno_id = :alumno_id)";
+// Fíjate en el & antes de $alumno (Paso por referencia)
+foreach ($listaAlumnos as &$alumno) {
+  // La subconsulta es correcta, pero un JOIN suele ser más eficiente
+  $sql = "SELECT cursos.* FROM cursos 
+            INNER JOIN alumnos_cursos ON cursos.id = alumnos_cursos.idcurso 
+            WHERE alumnos_cursos.idalumno = :alumno_id";
+
   $consulta = $conexionBD->prepare($sql);
   $consulta->bindParam(':alumno_id', $alumno['id']);
   $consulta->execute();
-  $cursosAsignados = $consulta->fetchAll();
-  $alumno['cursos'] = $cursosAlumno;
+
+  // Guardamos directamente el resultado en el array original
+  $alumno['cursos'] = $consulta->fetchAll(PDO::FETCH_ASSOC);
 }
-
-
+// Buena práctica: romper la referencia después del ciclo
+unset($alumno);
 
 //Recepción de datos del formulario
 
