@@ -13,14 +13,17 @@
         </div>
         <div class="card-body">
           <form action="" method="POST">
+
             <div class="mb-2">
               <label class="form-label">ID</label>
               <input type="text" name="id" class="form-control form-control-sm" placeholder="ID" value="<?php echo $id ?>">
             </div>
+
             <div class="mb-2">
               <label class="form-label">Nombre</label>
               <input type="text" name="nombre" class="form-control form-control-sm" placeholder="Nombre" value="<?php echo $nombre ?>">
             </div>
+
             <div class="mb-3">
               <label class="form-label">Apellidos</label>
               <input type="text" name="apellidos" class="form-control form-control-sm" placeholder="Apellidos" value="<?php echo $apellidos ?>">
@@ -28,10 +31,13 @@
 
             <div class="mb-3">
               <label for="" class="form-label">Cursos del Alumno</label>
+
               <select multiple class="form-control" name="cursos[]" id="listaCursos">
                 <option>Seleccione una opción</option>
-                <option value="">Curso 1</option>
-                <option value="">Curso 2</option>
+
+                <?php foreach ($listaCursos as $curso) { ?>
+                  <option value="<?php echo $curso['id']; ?>"> <?php echo $curso['id']; ?> - <?php echo $curso['nombre_curso']; ?></option>
+                <?php } ?>
               </select>
 
             </div>
@@ -43,7 +49,9 @@
                 <button type="submit" name="accion" value="eliminar" class="btn btn-danger btn-sm">Eliminar</button>
               </div>
             </div>
+
           </form>
+
         </div>
       </div>
     </div>
@@ -66,7 +74,12 @@
 
                 <td>
                   <?php echo $alumno['nombre'] ?>
-                  <?php print_r($alumno["cursos"]) ?>
+                  <br>
+                  <?php foreach ($alumno["cursos"] as $curso) { ?>
+                    - <a href="#"> <?php echo $curso['nombre_curso']; ?> </a> <br>
+                  <?php
+                  }
+                  ?>
                 </td>
 
                 <td><?php echo $alumno['apellidos'] ?></td>
