@@ -60,19 +60,19 @@
             </tr>
           </thead>
           <tbody>
-            <?php foreach ($listaAlumnos as $alumnos) { ?>
+            <?php foreach ($listaAlumnos as $alumno) { ?>
               <tr>
-                <td><?php echo $alumnos['id'] ?></td>
+                <td><?php echo $alumno['id'] ?></td>
 
                 <td>
-                  <?php echo $alumnos['nombre'] ?>
+                  <?php echo $alumno['nombre'] ?>
                   <?php print_r($alumno["cursos"]) ?>
                 </td>
 
-                <td><?php echo $alumnos['apellidos'] ?></td>
+                <td><?php echo $alumno['apellidos'] ?></td>
                 <td class="text-center">
                   <form action="" method="post">
-                    <input type="hidden" name="id" id="id" value="<?php echo $alumnos['id'] ?>">
+                    <input type="hidden" name="id" id="id" value="<?php echo $alumno['id'] ?>">
                     <input type="submit" value="Seleccionar" name="accion" class="btn btn-info btn-sm">
                   </form>
                 </td>
