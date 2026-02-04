@@ -7,7 +7,7 @@ $conexionBD = BD::crearInstancia();
 $id = (isset($_POST['id'])) ? $_POST['id'] : "";
 $nombre = (isset($_POST['nombre'])) ? $_POST['nombre'] : "";
 $apellidos = (isset($_POST['apellidos'])) ? $_POST['apellidos'] : "";
-$listaCursos = (isset($_POST['cursos'])) ? $_POST['cursos'] : "";
+$cursosSeleccionados = (isset($_POST['cursos'])) ? $_POST['cursos'] : "";
 $accion = (isset($_POST['accion'])) ? $_POST['accion'] : "";
 
 //Llamado a todas las personas de la base de datos
@@ -19,7 +19,6 @@ $listaAlumnos = $consulta->fetchAll();
 $consulta = $conexionBD->prepare("SELECT * FROM cursos");
 $consulta->execute();
 $listaCursos = $consulta->fetchAll();
-print_r($listaCursos);
 
 //leyendo los cursos asignados al alumno
 foreach ($listaAlumnos as $clave => $alumno) {
@@ -59,6 +58,51 @@ if ($accion) {
           $consultaIntermedia->execute();
         }
       }
+
+      header("Location: vista_alumnos.php");
+      exit();
+      break;
+  }
+
+  switch ($accion) {
+    case 'Seleccionar':
+
+      $sql = "SELECT * FROM alumnos WHERE id=:id";
+      $consulta = $conexionBD->prepare($sql);
+      $consulta->bindParam(':id', $id);
+      $consulta->execute();
+      $alumno = $consulta->fetch(PDO::FETCH_ASSOC);
+      $nombre = $alumno['nombre'];
+      $apellidos = $alumno['apellidos'];
+
+      $sql = "SELECT cursos.id FROM alumnos_cursos
+      INNER JOIN cursos ON cursos.id = alumnos_cursos.idcurso
+      WHERE alumnos_cursos.idalumno=:idalumno";
+      $consulta = $conexionBD->prepare($sql);
+      $consulta->bindParam(':idalumno', $id);
+      $consulta->execute();
+      $cursosDelAlumno = $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+      foreach ($cursosDelAlumno as $curso) {
+        $arregloCursos[] = $curso['id'];
+      }
+
+      break;
+  }
+
+  switch ($accion) {
+    case 'eliminar':
+      // Eliminar de la tabla intermedia primero
+      $sql = "DELETE FROM alumnos_cursos WHERE idalumno=:idalumno";
+      $consulta = $conexionBD->prepare($sql);
+      $consulta->bindParam(':idalumno', $id);
+      $consulta->execute();
+
+      // Luego eliminar de la tabla alumnos
+      $sql = "DELETE FROM alumnos WHERE id=:id";
+      $consulta = $conexionBD->prepare($sql);
+      $consulta->bindParam(':id', $id);
+      $consulta->execute();
 
       header("Location: vista_alumnos.php");
       exit();
