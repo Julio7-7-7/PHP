@@ -33,10 +33,16 @@
               <label for="" class="form-label">Cursos del Alumno</label>
 
               <select multiple class="form-control" name="cursos[]" id="listaCursos">
-                <option>Seleccione una opción</option>
-
                 <?php foreach ($listaCursos as $curso) { ?>
-                  <option value="<?php echo $curso['id']; ?>"> <?php echo $curso['id']; ?> - <?php echo $curso['nombre_curso']; ?></option>
+                  <option
+                    <?php
+                    if (!empty($arregloCursos)):
+                      if (in_array($curso['id'], $arregloCursos)) :
+                        echo "selected";
+                      endif;
+                    endif;
+                    ?>
+                    value="<?php echo $curso['id']; ?>"> <?php echo $curso['id']; ?> - <?php echo $curso['nombre_curso']; ?></option>
                 <?php } ?>
               </select>
 
@@ -99,5 +105,16 @@
   </div>
 </div>
 
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.4/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.4/dist/js/tom-select.complete.min.js"></script>
+<script>
+  new TomSelect("#listaCursos", {
+    create: false,
+    sortField: {
+      field: "text",
+      direction: "asc"
+    }
+  });
+</script>
 
 <?php include('../templates/pie.php'); ?>
